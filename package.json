@@ -27,7 +27,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"firebase": "^8.8.1",
-		"sveltefire": "^0.1.5"
+		"@tailwindcss/forms": "^0.3.3",
+		"firebase": "^8.8.1"
 	}
 }
