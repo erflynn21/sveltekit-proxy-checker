@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '../app.postcss';
+	import { onMount } from 'svelte';
 	import firebase from 'firebase/app';
 	import 'firebase/auth';
-	import { onMount } from 'svelte';
 	import authStore from '../stores/authStore';
 
 	onMount(() => {
@@ -16,7 +16,9 @@
 			measurementId: 'G-GCF7CHJ6X7'
 		};
 
-		firebase.initializeApp(firebaseConfig);
+		if (!firebase.apps.length) {
+			firebase.initializeApp(firebaseConfig);
+		}
 
 		firebase.auth().onAuthStateChanged((user) => {
 			authStore.set({
