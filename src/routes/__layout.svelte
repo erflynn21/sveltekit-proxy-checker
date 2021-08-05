@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import firebase from 'firebase/app';
 	import 'firebase/auth';
+	import userStore from '../stores/userStore';
 	import authStore from '../stores/authStore';
 
 	onMount(() => {
@@ -21,12 +22,27 @@
 		}
 
 		firebase.auth().onAuthStateChanged((user) => {
-			authStore.set({
+			userStore.set({
 				isLoggedIn: user !== null,
 				user,
 				firebaseControlled: true
 			});
+			setAuthCreds();
 		});
+
+		const setAuthCreds = () => {
+			firebase
+				.firestore()
+				.collection('authDetails')
+				.doc($userStore.user.uid)
+				.get()
+				.then((doc) => {
+					authStore.set({
+						username: doc.data().username,
+						password: doc.data().password
+					});
+				});
+		};
 	});
 </script>
 
