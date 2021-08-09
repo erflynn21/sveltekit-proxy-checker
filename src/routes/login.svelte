@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
 	import firebase from 'firebase/app';
 	import 'firebase/auth';
 
