@@ -244,6 +244,33 @@
 						</select>
 					</div>
 					<div class="mt-4">
+						<label for="product" class="block text-sm font-medium text-gray-700">Product:</label>
+						<select
+							id="product"
+							name="product"
+							class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+						>
+							<option selected>Unmetered Residential</option>
+							<option>Premium Residential</option>
+							<option>Private Residential</option>
+							<option>USA Datacenter</option>
+							<option>Global Datacenter</option>
+							<option>Canada Datacenter</option>
+							<option>Static USA Datacenter</option>
+						</select>
+					</div>
+					<div class="mt-4">
+						<label for="port" class="block text-sm font-medium text-gray-700">Port:</label>
+						<select
+							id="port"
+							name="port"
+							class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+						>
+							<option selected>Random</option>
+							<option>Sticky</option>
+						</select>
+					</div>
+					<div class="mt-4">
 						<label for="auth" class="block text-sm font-medium text-gray-700">Authentication:</label
 						>
 						<select
