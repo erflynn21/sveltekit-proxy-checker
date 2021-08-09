@@ -1,6 +1,6 @@
 <script lang="ts">
-	import firebase from 'firebase/app';
-	import 'firebase/auth';
+	import firebase from '@firebase/app';
+	import '@firebase/auth';
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 

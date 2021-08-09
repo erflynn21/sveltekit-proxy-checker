@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '../app.postcss';
 	import { onMount } from 'svelte';
-	import firebase from 'firebase/app';
-	import 'firebase/auth';
+	import firebase from '@firebase/app';
+	import '@firebase/auth';
 	import userStore from '../stores/userStore';
 	import authStore from '../stores/authStore';
 

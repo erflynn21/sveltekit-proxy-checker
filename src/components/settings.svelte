@@ -1,8 +1,8 @@
 <script lang="ts">
 	import authStore from '../stores/authStore';
 	import userStore from '../stores/userStore';
-	import firebase from 'firebase/app';
-	import 'firebase/firestore';
+	import firebase from '@firebase/app';
+	import '@firebase/firestore';
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
