@@ -25,12 +25,9 @@
 				<div class="flex items-center justify-between h-16 px-4 sm:px-0">
 					<div class="flex items-center">
 						<div class="flex-shrink-0">
-							<img
-								class="h-8 w-8"
-								src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-								alt="Workflow"
-							/>
+							<img class="h-8 w-8" src="logo.png" alt="Workflow" />
 						</div>
+						<h1 class="text-white ml-4 text-xl">Proxyrack Proxy Checker</h1>
 					</div>
 					<div class="hidden md:block">
 						<div class="ml-4 flex items-center md:ml-6">
@@ -46,11 +43,20 @@
 										on:click={() => (dropdown = !dropdown)}
 									>
 										<span class="sr-only">Open user menu</span>
-										<img
-											class="h-8 w-8 rounded-full"
-											src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-											alt=""
-										/>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-8 w-8"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="white"
+										>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+											/>
+										</svg>
 									</button>
 								</div>
 
@@ -74,7 +80,7 @@
 									>
 										<!-- Active: "bg-gray-100", Not Active: "" -->
 										<div class="px-4 py-3" role="none">
-											<p class="text-sm" role="none">Signed in as</p>
+											<p class="text-sm " role="none">Signed in as</p>
 											<p class="text-sm font-medium text-gray-900 truncate" role="none">
 												{#if $userStore.isLoggedIn}
 													{$userStore.user.email}
@@ -117,46 +123,39 @@
 							on:click={() => (dropdown = !dropdown)}
 						>
 							<span class="sr-only">Open main menu</span>
-							<!--
-                  Heroicon name: outline/menu
 
-                  Menu open: "hidden", Menu closed: "block"
-                -->
-							<svg
-								class="block h-6 w-6"
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								aria-hidden="true"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M4 6h16M4 12h16M4 18h16"
-								/>
-							</svg>
-							<!--
-                  Heroicon name: outline/x
-
-                  Menu open: "block", Menu closed: "hidden"
-                -->
-							<svg
-								class="hidden h-6 w-6"
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								aria-hidden="true"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M6 18L18 6M6 6l12 12"
-								/>
-							</svg>
+							{#if !dropdown}
+								<svg
+									class="block h-6 w-6"
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									aria-hidden="true"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M4 6h16M4 12h16M4 18h16"
+									/>
+								</svg>
+							{:else}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-6 w-6"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M6 18L18 6M6 6l12 12"
+									/>
+								</svg>
+							{/if}
 						</button>
 					</div>
 				</div>
@@ -165,19 +164,14 @@
 
 		{#if dropdown}
 			<!-- Mobile menu, show/hide based on menu state. -->
-			<div class="border-b border-gray-700 md:hidden" id="mobile-menu">
+			<div class="border-b border-gray-700 md:hidden w-full" id="mobile-menu">
 				<div class="pt-4 pb-3 border-t border-gray-700">
 					<div class="flex items-center px-5">
-						<div class="flex-shrink-0">
-							<img
-								class="h-10 w-10 rounded-full"
-								src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-								alt=""
-							/>
-						</div>
-						<div class="ml-3">
-							<div class="text-base font-medium leading-none text-white">Signed in as</div>
-							<div class="text-sm font-medium leading-none text-gray-400">
+						<div class="w-full">
+							<div class="text-base font-medium leading-none text-white text-center mb-2">
+								Signed in as:
+							</div>
+							<div class="text-sm font-medium leading-none text-gray-400 text-center">
 								{#if $userStore.isLoggedIn}
 									{$userStore.user.email}
 								{/if}
@@ -187,14 +181,14 @@
 					<div class="mt-3 px-2 space-y-1">
 						<div
 							on:click={() => (settings = !settings)}
-							class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 cursor-pointer"
+							class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 cursor-pointer text-center"
 						>
 							Settings
 						</div>
 
 						<div
 							on:click={() => (logout = !logout)}
-							class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 cursor-pointer"
+							class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 cursor-pointer text-center"
 						>
 							Sign out
 						</div>
