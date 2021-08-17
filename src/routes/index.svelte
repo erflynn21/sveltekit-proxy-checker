@@ -1,15 +1,19 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Countries from '../components/countries.svelte';
 	import Nav from '../components/nav.svelte';
 	import userStore from '../stores/userStore';
 
 	let action: string = 'Check Number of IPs in a Country';
+	let country: string = '';
 	let product: string = 'Unmetered Residential';
 	let port: string = 'Random';
 	let portNumber: number = 10000;
 	let auth: string = 'Use My Authentication Details';
 	let username: string = '';
 	let password: string = '';
+	let parameters: string = '';
+	let toggled: boolean = false;
 
 	userStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
 		if (!isLoggedIn && firebaseControlled) {
@@ -37,12 +41,25 @@
 							<option>Get List of Available Countries</option>
 							<option>Get List of Available Cities</option>
 							<option>Get List of Available ISPs</option>
-							<option>Check IP Info</option>
+							<option>Check IP Information</option>
 							<option>Check Sessions Information</option>
 							<option>Get Stats</option>
 							<option>Get Current Thread Usage</option>
 						</select>
 					</div>
+					{#if action === 'Check Number of IPs in a Country'}
+						<div class="mt-4">
+							<label for="country" class="block text-sm font-medium text-gray-700">Country:</label>
+							<select
+								id="country"
+								name="country"
+								bind:value={country}
+								class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+							>
+								<Countries />
+							</select>
+						</div>
+					{/if}
 					<div class="mt-4">
 						<label for="product" class="block text-sm font-medium text-gray-700">Product:</label>
 						<select
@@ -117,7 +134,6 @@
 								name="name"
 								id="name"
 								class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-								placeholder="Username"
 								bind:value={username}
 							/>
 						</div>
@@ -134,10 +150,73 @@
 								name="name"
 								id="name"
 								class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
-								placeholder="Username"
 								bind:value={password}
 							/>
 						</div>
+					{/if}
+					{#if action === 'Check IP Information' || action === 'Check Sessions Information' || action === 'Get Stats'}
+						<div class="flex items-center justify-between mt-4">
+							<span class="flex-grow flex flex-col">
+								<span class="text-sm font-medium text-gray-900" id="availability-label"
+									>Include Additional Parameters</span
+								>
+							</span>
+							<button
+								type="button"
+								class={toggled
+									? 'bg-gray-600 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+									: 'bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'}
+								role="switch"
+								aria-checked="false"
+								on:click={() => (toggled = !toggled)}
+							>
+								<span class="sr-only">Use setting</span>
+								<span
+									class={toggled
+										? 'translate-x-5 pointer-events-none relative inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200'
+										: 'translate-x-0 pointer-events-none relative inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200'}
+								>
+									<span
+										class={toggled
+											? 'opacity-0 ease-out duration-100 absolute inset-0 h-full w-full flex items-center justify-center transition-opacity'
+											: 'opacity-100 ease-in duration-200 absolute inset-0 h-full w-full flex items-center justify-center transition-opacity'}
+										aria-hidden="true"
+									>
+										<svg class="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 12 12">
+											<path
+												d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2"
+												stroke="currentColor"
+												stroke-width="2"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+											/>
+										</svg>
+									</span>
+									<span
+										class={toggled
+											? 'opacity-100 ease-in duration-200 absolute inset-0 h-full w-full flex items-center justify-center transition-opacity'
+											: 'opacity-0 ease-out duration-100 absolute inset-0 h-full w-full flex items-center justify-center transition-opacity'}
+										aria-hidden="true"
+									>
+										<svg class="h-3 w-3 text-indigo-600" fill="currentColor" viewBox="0 0 12 12">
+											<path
+												d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z"
+											/>
+										</svg>
+									</span>
+								</span>
+							</button>
+						</div>
+					{/if}
+					{#if toggled}
+						<label for="parameters" class="block text-sm font-medium text-gray-700 mt-4"
+							>Parameters:</label
+						>
+						<textarea
+							class="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-lg focus:outline-none mt-2"
+							rows="2"
+							bind:value={parameters}
+						/>
 					{/if}
 				</div>
 				<button
