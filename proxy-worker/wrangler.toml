@@ -1,0 +1,7 @@
+name = "proxy-worker"
+type = "webpack"
+
+account_id = "673ce50780d87f22fedb2bf28de01dc0 "
+workers_dev = true
+route = ""
+zone_id = ""
