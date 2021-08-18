@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import authStore from '../stores/authStore';
 	import Countries from '../components/countries.svelte';
 	import Nav from '../components/nav.svelte';
 	import userStore from '../stores/userStore';
 
 	let action: string = 'Check Number of IPs in a Country';
-	let country: string = '';
+	let country: string = 'United States';
 	let product: string = 'Unmetered Residential';
 	let port: string = 'Random';
 	let portNumber: number = 10000;
@@ -14,6 +15,11 @@
 	let password: string = '';
 	let parameters: string = '';
 	let toggled: boolean = false;
+
+	$: if ($authStore.username) {
+		username = $authStore.username;
+		password = $authStore.password;
+	}
 
 	const handleSubmit = (e) => {
 		fetch('http://127.0.0.1:8787', {
@@ -33,7 +39,8 @@
 				'content-type': 'application/json',
 				'Access-Control-Allow-Headers': 'X-Requested-With'
 			}
-		}).then((resp) => console.log(resp.json()));
+		});
+		// .then((resp) => console.log(resp.json()));
 	};
 
 	userStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
