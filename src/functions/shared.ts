@@ -1,4 +1,5 @@
 import type { Data } from "src/interfaces";
+import countryCodeLookup from 'iso-countries-lookup';
 
 const getProxyURL = (data: Data) => {
     let proxy: string;
@@ -46,4 +47,10 @@ const getProxyURL = (data: Data) => {
     return proxy;
 }
 
-export {getProxyURL}
+const getCountryCode = (country: string) => {
+    console.log(country)
+    const countryCode = countryCodeLookup(country);
+    return countryCode;
+}   
+
+export {getProxyURL, getCountryCode}

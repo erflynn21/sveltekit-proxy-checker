@@ -1,6 +1,5 @@
 import type { Data } from '../interfaces'
-import request from 'request';
-import { getProxyURL } from './shared';
+import { getCountryCode, getProxyURL } from './shared';
 
 const processRequest = async (data: Data) => {
     const proxy = getProxyURL(data)
@@ -30,35 +29,37 @@ const processRequest = async (data: Data) => {
     }
 }
 
-const getCountryIPs = (data: Data, proxy: string) => {
-    
+const getCountryIPs = (data: Data, proxy) => {
+    console.log(proxy)
+    const countryCode = getCountryCode(data.country);
+    console.log(countryCode)
 }
 
-const getCountryList = (data: Data, proxy: string) => {
+const getCountryList = (data: Data, proxy) => {
     console.log('get country list')
 }
 
-const getCityList = (data: Data, proxy: string) => {
+const getCityList = (data: Data, proxy) => {
     console.log('get city list')
 }
 
-const getISPList = (data: Data, proxy: string) => {
+const getISPList = (data: Data, proxy) => {
     console.log('get isp list')
 }
 
-const checkIPInfo = (data: Data, proxy: string) => {
+const checkIPInfo = (data: Data, proxy) => {
     console.log('check IP Info')
 }
 
-const getSessions = (data: Data, proxy: string) => {
+const getSessions = (data: Data, proxy) => {
     console.log('sessions info')
 }
 
-const getStats = (data: Data, proxy: string) => {
+const getStats = (data: Data, proxy) => {
     console.log('stats')
 }
 
-const getThreadUsage = (data: Data, proxy: string) => {
+const getThreadUsage = (data: Data, proxy) => {
     console.log('threads')
 }
 
