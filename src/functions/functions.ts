@@ -1,10 +1,20 @@
 import type { Data } from '../interfaces'
 import { getCountryCode, getProxyURL } from './shared';
+import firebase from '@firebase/app';
+import '@firebase/functions';
+
+// const functions = firebase.functions();
+// functions.useEmulator('localhost', 5001);
 
 const processRequest = async (data: Data) => {
     const proxy = getProxyURL(data)
     if (data.action === 'Check Number of IPs in a Country') {
         getCountryIPs(data, proxy)
+        firebase.functions().useEmulator('localhost', 5001)
+        const sayHello = firebase.functions().httpsCallable('helloWorld');
+        sayHello().then(res => {
+            console.log(res.data)
+        })
     }
     if (data.action === 'Get List of Available Countries') {
         getCountryList(data, proxy)

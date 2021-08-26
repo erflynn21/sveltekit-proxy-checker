@@ -30,6 +30,7 @@
 	"type": "module",
 	"dependencies": {
 		"@tailwindcss/forms": "^0.3.3",
+		"cors": "^2.8.5",
 		"firebase": "^8.8.1",
 		"iso-countries-lookup": "^2.0.4"
 	}
