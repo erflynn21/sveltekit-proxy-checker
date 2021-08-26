@@ -11,8 +11,14 @@ const processRequest = async (data: Data) => {
     if (data.action === 'Check Number of IPs in a Country') {
         getCountryIPs(data, proxy)
         firebase.functions().useEmulator('localhost', 5001)
+        const params = JSON.stringify({
+            ...data, proxy
+        })
+        console.log(JSON.parse(params))
+
+
         const sayHello = firebase.functions().httpsCallable('helloWorld');
-        sayHello().then(res => {
+        sayHello(params).then(res => {
             console.log(res.data)
         })
     }
