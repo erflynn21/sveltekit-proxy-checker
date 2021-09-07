@@ -8,7 +8,7 @@
 	import { processRequest } from '../functions/functions';
 
 	let action: string = 'Check Number of IPs in a Country';
-	let country: string = 'United States';
+	let country: string = 'US';
 	let product: string = 'Unmetered Residential';
 	let port: string = 'Random';
 	let portNumber: number = 10000;

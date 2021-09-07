@@ -1,55 +1,90 @@
 import type { Data } from "src/interfaces";
-import countryCodeLookup from 'iso-countries-lookup';
+import lookup from 'country-code-lookup';
 
 const getProxyURL = (data: Data) => {
-    let proxy: string;
+    let proxy: object;
     const username = data.username;
     const password = data.password;
     const port = data.port
     const parameters = data.parameters
 
     if (data.product === 'Unmetered Residential' && port === 'Random') {
-        proxy = `http://${username}${parameters}:${password}:megaproxy.rotating.proxyrack.net:222`
+        proxy = {
+            host: 'megaproxy.rotating.proxyrack.net',
+            port: 222
+        }
     }
     if (data.product === 'Unmetered Residential' && port === 'Sticky') {
-        proxy = `http://${username}${parameters}:${password}:megaproxy.rotating.proxyrack.net:${data.portNumber}`
+        proxy = {
+            host: 'megaproxy.rotating.proxyrack.net',
+            port: data.portNumber
+        }
     }
     if (data.product === 'Premium Residential' && port === 'Random') {
-        proxy = `http://${username}${parameters}:${password}:premium.residential.proxyrack.net:9000`
+        proxy = {
+            host: 'premium.residential.proxyrack.net',
+            port: 9000
+        }
     }
     if (data.product === 'Premium Residential' && port === 'Sticky') {
-        proxy = `http://${username}${parameters}:${password}:premium.residentialproxyrack.net:${data.portNumber}`
+        proxy = {
+            host: 'premium.residential.proxyrack.net',
+            port: data.portNumber
+        }
     }
     if (data.product === 'Private Residential') {
-        proxy = `http://${username}${parameters}:${password}:private.residentialproxyrack.net:${data.portNumber}`
+        proxy = {
+            host: 'private.residential.proxyrack.net',
+            port: data.portNumber
+        }
     }
     if (data.product === 'USA Datacenter' && port === 'Random') {
-        proxy = `http://${username}${parameters}:${password}:usa.rotating.proxyrack.net:333`
+        proxy = {
+            host: 'usa.rotating.proxyrack.net',
+            port: 333
+        }
     }
     if (data.product === 'USA Datacenter' && port === 'Sticky') {
-        proxy = `http://${username}${parameters}:${password}:usa.rotating.proxyrack.net:${data.portNumber}`
+        proxy = {
+            host: 'usa.rotating.proxyrack.net',
+            port: data.portNumber
+        }
     }
     if (data.product === 'Global Datacenter' && port === 'Random') {
-        proxy = `http://${username}${parameters}:${password}:mixed.rotating.proxyrack.net:444`
+        proxy = {
+            host: 'mixed.rotating.proxyrack.net',
+            port: 444
+        }
     }
     if (data.product === 'Global Datacenter' && port === 'Sticky') {
-        proxy = `http://${username}${parameters}:${password}:mixed.rotating.proxyrack.net:${data.portNumber}`
+        proxy = {
+            host: 'mixed.rotating.proxyrack.net',
+            port: data.portNumber
+        }
     }
     if (data.product === 'Canada Datacenter' && port === 'Random') {
-        proxy = `http://${username}${parameters}:${password}:canada.rotating.proxyrack.net:9000`
+        proxy = {
+            host: 'canada.rotating.proxyrack.net',
+            port: 9000
+        }
     }
     if (data.product === 'Canada Datacenter' && port === 'Sticky') {
-        proxy = `http://${username}${parameters}:${password}:canada.rotating.proxyrack.net:${data.portNumber}`
+        proxy = {
+            host: 'canada.rotating.proxyrack.net',
+            port: data.portNumber
+        } 
     }
     if (data.product === 'Static USA Datacenter') {
-        proxy = `http://${username}${parameters}:${password}:usa.shared.proxyrack.net:${data.portNumber}`
+        proxy = {
+            host: 'usa.shared.proxyrack.net',
+            port: data.portNumber
+        }
     }
     return proxy;
 }
 
 const getCountryCode = (country: string) => {
-    console.log(country)
-    const countryCode = countryCodeLookup(country);
+    const countryCode = lookup.byCountry(country).iso2;
     return countryCode;
 }   
 

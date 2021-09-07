@@ -1,15 +1,31 @@
 import * as functions from "firebase-functions";
-// const request = require('request');
+const http = require('http')
 
-// Start writing Firebase Functions
-// https://firebase.google.com/docs/functions/typescript
-
-export const helloWorld = functions.https.onCall((data, context) => {
+export const getCountryIPs = functions.https.onCall(async (data, context) => {
   const json = JSON.parse(data)
-  console.log(json.action)
-//   const obj = JSON.parse(json);
-//   console.log(obj)
-//   const cors = require('cors')({origin: true});
-  return 'Hello from Firebase'
-  
+  const options = {
+      host: json.proxy.host,
+      port: json.proxy.port,
+      path: `https://api.proxyrack.net/countries/${json.countryCode}/count`,
+      method: 'GET',
+      mode: 'no-cors',
+      headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9',
+          'Proxy-Authorization': 'Basic ' + Buffer.from(json.username + ':' + json.password).toString('base64'),
+      }
+  }
+
+  let dataToSend
+
+  await new Promise<void>(resolve => {
+    http.get(options, function(res: { on: (arg0: string, arg1: (response: any) => void) => void; }) {
+      res.on('data', function (response: string) {
+          const number = parseInt(response)
+          dataToSend = JSON.stringify({ number })     
+      })
+      resolve()
+    })
+    
+  })
+  return dataToSend
 });

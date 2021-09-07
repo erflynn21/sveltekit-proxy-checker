@@ -9,18 +9,14 @@ import '@firebase/functions';
 const processRequest = async (data: Data) => {
     const proxy = getProxyURL(data)
     if (data.action === 'Check Number of IPs in a Country') {
-        getCountryIPs(data, proxy)
+        const countryCode = data.country;
         firebase.functions().useEmulator('localhost', 5001)
-        const params = JSON.stringify({
-            ...data, proxy
-        })
-        console.log(JSON.parse(params))
-
-
-        const sayHello = firebase.functions().httpsCallable('helloWorld');
-        sayHello(params).then(res => {
-            console.log(res.data)
-        })
+        const params = { ...data, proxy, countryCode}
+        const getCountryIPs = firebase.functions().httpsCallable('getCountryIPs');
+        const res = await getCountryIPs(JSON.stringify(params))
+        const result = JSON.parse(res.data)
+        const number = result.number
+        console.log(number)
     }
     if (data.action === 'Get List of Available Countries') {
         getCountryList(data, proxy)
@@ -45,11 +41,9 @@ const processRequest = async (data: Data) => {
     }
 }
 
-const getCountryIPs = (data: Data, proxy) => {
-    console.log(proxy)
-    const countryCode = getCountryCode(data.country);
-    console.log(countryCode)
-}
+// const getCountryIPs = (data: Data, proxy) => {
+//     console.log(proxy)
+// }
 
 const getCountryList = (data: Data, proxy) => {
     console.log('get country list')
