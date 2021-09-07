@@ -17,6 +17,8 @@
 	let password: string = '';
 	let parameters: string = '';
 	let toggled: boolean = false;
+	let resultReadout: string = '';
+	let curl: string = '';
 
 	$: if ($authStore.username) {
 		username = $authStore.username;
@@ -35,7 +37,10 @@
 			password: password,
 			parameters: parameters
 		};
-		processRequest(data);
+		processRequest(data).then((res) => {
+			resultReadout = res.resultReadout;
+			curl = res.curl;
+		});
 	};
 
 	userStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
@@ -280,11 +285,13 @@
 					<textarea
 						class="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-lg focus:outline-none mt-2"
 						rows="6"
+						bind:value={resultReadout}
 					/>
 					<label for="curl" class="block text-sm font-medium text-gray-700 mt-2">Curl:</label>
 					<textarea
 						class="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-lg focus:outline-none mt-2"
 						rows="4"
+						bind:value={curl}
 					/>
 				</div>
 			</div>

@@ -2,6 +2,7 @@ import type { Data } from '../interfaces'
 import { getCountryCode, getProxyURL } from './shared';
 import firebase from '@firebase/app';
 import '@firebase/functions';
+import lookup from 'country-code-lookup';
 
 // const functions = firebase.functions();
 // functions.useEmulator('localhost', 5001);
@@ -16,7 +17,23 @@ const processRequest = async (data: Data) => {
         const res = await getCountryIPs(JSON.stringify(params))
         const result = JSON.parse(res.data)
         const number = result.number
-        console.log(number)
+        const country = lookup.byIso(countryCode).country
+
+        let response: { resultReadout: string; curl: string; };
+        
+        if (countryCode === 'US' || countryCode === 'UK' || countryCode === 'CF' || countryCode === 'AX' || countryCode === 'BS' || countryCode === 'CC' || countryCode === 'CD' || countryCode === 'CK' || countryCode === 'CZ' || countryCode === 'DO' || countryCode === 'FK' || countryCode === 'HM' || countryCode === 'VA' || countryCode === 'IM' || countryCode === 'MH' || countryCode === 'SB' || countryCode === 'TC' || countryCode === 'UM' || countryCode === 'VG' || countryCode === 'VI') {
+            response = {
+                resultReadout: `We currently have ${number} ${data.product} IPs available in the ${country}.`,
+                curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+            }
+        } else {
+            response = {
+                resultReadout: `We currently have ${number} ${data.product} IPs available in ${country}.`,
+                curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+            }
+        }
+     
+        return response
     }
     if (data.action === 'Get List of Available Countries') {
         getCountryList(data, proxy)

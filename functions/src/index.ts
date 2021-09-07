@@ -21,7 +21,7 @@ export const getCountryIPs = functions.https.onCall(async (data, context) => {
     http.get(options, function(res: { on: (arg0: string, arg1: (response: any) => void) => void; }) {
       res.on('data', function (response: string) {
           const number = parseInt(response)
-          dataToSend = JSON.stringify({ number })     
+          dataToSend = JSON.stringify({ number, url: options.path })     
       })
       resolve()
     })
