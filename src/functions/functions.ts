@@ -78,7 +78,7 @@ const processRequest = async (data: Data) => {
     if (data.action === 'Get List of Available ISPs') {
         const countryCode = data.country;
         const params = { ...data, proxy, countryCode}
-        // firebase.functions().useEmulator('localhost', 5001)
+        firebase.functions().useEmulator('localhost', 5001)
         const getISPList = firebase.functions().httpsCallable('getISPList');
         const res = await getISPList(JSON.stringify(params))
         const result = JSON.parse(res.data)
@@ -89,12 +89,12 @@ const processRequest = async (data: Data) => {
 
         if (countryCode === 'US' || countryCode === 'UK' || countryCode === 'CF' || countryCode === 'AX' || countryCode === 'BS' || countryCode === 'CC' || countryCode === 'CD' || countryCode === 'CK' || countryCode === 'CZ' || countryCode === 'DO' || countryCode === 'FK' || countryCode === 'HM' || countryCode === 'VA' || countryCode === 'IM' || countryCode === 'MH' || countryCode === 'SB' || countryCode === 'TC' || countryCode === 'UM' || countryCode === 'VG' || countryCode === 'VI') {
             response = {
-                resultReadout: `We currently have ${data.product} IPs available in the following cities in the ${country}: ${list}.`,
+                resultReadout: `We currently have ${data.product} IPs with the following ISPs in the ${country}: ${list}.`,
                 curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
             }
         } else {
             response = {
-                resultReadout: `We currently have ${data.product} IPs available in the following cities in ${country}: ${list}.`,
+                resultReadout: `We currently have ${data.product} IPs with the following ISPs in ${country}: ${list}.`,
                 curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
             }
         }
