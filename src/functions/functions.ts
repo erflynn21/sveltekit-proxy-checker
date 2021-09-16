@@ -32,7 +32,21 @@ const processRequest = async (data: Data) => {
         return response
     }
     if (data.action === 'Get List of Available Countries') {
-        getCountryList(data, proxy)
+        const params = { ...data, proxy}
+        // firebase.functions().useEmulator('localhost', 5001)
+        const getCountryIPs = firebase.functions().httpsCallable('getCountryList');
+        const res = await getCountryIPs(JSON.stringify(params))
+        const result = JSON.parse(res.data)
+        const list = result.list.toString().replace(/,/g, ', ').replace(/,(?=[^,]*$)/, ' and')
+
+        let response: { resultReadout: string; curl: string; };
+        
+        response = {
+            resultReadout: `We currently have ${data.product} IPs available in the following countries: ${list}.`,
+            curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+        }
+
+        return response
     }
     if (data.action === 'Get List of Available Cities') {
         getCityList(data, proxy)

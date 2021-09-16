@@ -48,9 +48,9 @@ export const getCountryList = functions.https.onCall(async (data, context) => {
 
   await new Promise<void>(resolve => {
     http.get(options, function(res: { on: (arg0: string, arg1: (response: any) => void) => void; }) {
-      res.on('data', function (response: string) {
-          const number = parseInt(response)
-          dataToSend = JSON.stringify({ number, url: options.path })     
+      res.on('data', function (response) {
+          const list = JSON.parse(response)
+          dataToSend = JSON.stringify({ list, url: options.path })     
       })
       resolve()
     })
