@@ -77,7 +77,7 @@
 							<option>Get Current Thread Usage</option>
 						</select>
 					</div>
-					{#if action === 'Check Number of IPs in a Country'}
+					{#if action === 'Check Number of IPs in a Country' || action === 'Get List of Available Cities' || action === 'Get List of Available ISPs'}
 						<div class="mt-4">
 							<label for="country" class="block text-sm font-medium text-gray-700">Country:</label>
 							<select

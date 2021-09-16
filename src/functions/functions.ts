@@ -9,6 +9,7 @@ const processRequest = async (data: Data) => {
     if (data.action === 'Check Number of IPs in a Country') {
         const countryCode = data.country;
         const params = { ...data, proxy, countryCode}
+        // firebase.functions().useEmulator('localhost', 5001)
         const getCountryIPs = firebase.functions().httpsCallable('getCountryIPs');
         const res = await getCountryIPs(JSON.stringify(params))
         const result = JSON.parse(res.data)
@@ -34,8 +35,8 @@ const processRequest = async (data: Data) => {
     if (data.action === 'Get List of Available Countries') {
         const params = { ...data, proxy}
         // firebase.functions().useEmulator('localhost', 5001)
-        const getCountryIPs = firebase.functions().httpsCallable('getCountryList');
-        const res = await getCountryIPs(JSON.stringify(params))
+        const getCountryList = firebase.functions().httpsCallable('getCountryList');
+        const res = await getCountryList(JSON.stringify(params))
         const result = JSON.parse(res.data)
         const list = result.list.toString().replace(/,/g, ', ').replace(/,(?=[^,]*$)/, ' and')
 
@@ -49,10 +50,56 @@ const processRequest = async (data: Data) => {
         return response
     }
     if (data.action === 'Get List of Available Cities') {
-        getCityList(data, proxy)
+        const countryCode = data.country;
+        const params = { ...data, proxy, countryCode}
+        // firebase.functions().useEmulator('localhost', 5001)
+        const getCityList = firebase.functions().httpsCallable('getCityList');
+        const res = await getCityList(JSON.stringify(params))
+        const result = JSON.parse(res.data)
+        const list = result.list.toString().replace(/,/g, ', ').replace(/,(?=[^,]*$)/, ' and')
+        const country = lookup.byIso(countryCode).country
+
+        let response: { resultReadout: string; curl: string; };
+
+        if (countryCode === 'US' || countryCode === 'UK' || countryCode === 'CF' || countryCode === 'AX' || countryCode === 'BS' || countryCode === 'CC' || countryCode === 'CD' || countryCode === 'CK' || countryCode === 'CZ' || countryCode === 'DO' || countryCode === 'FK' || countryCode === 'HM' || countryCode === 'VA' || countryCode === 'IM' || countryCode === 'MH' || countryCode === 'SB' || countryCode === 'TC' || countryCode === 'UM' || countryCode === 'VG' || countryCode === 'VI') {
+            response = {
+                resultReadout: `We currently have ${data.product} IPs available in the following cities in the ${country}: ${list}.`,
+                curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+            }
+        } else {
+            response = {
+                resultReadout: `We currently have ${data.product} IPs available in the following cities in ${country}: ${list}.`,
+                curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+            }
+        }
+
+        return response
     }
     if (data.action === 'Get List of Available ISPs') {
-        getISPList(data, proxy)
+        const countryCode = data.country;
+        const params = { ...data, proxy, countryCode}
+        // firebase.functions().useEmulator('localhost', 5001)
+        const getISPList = firebase.functions().httpsCallable('getISPList');
+        const res = await getISPList(JSON.stringify(params))
+        const result = JSON.parse(res.data)
+        const list = result.list.toString().replace(/,/g, ', ').replace(/,(?=[^,]*$)/, ' and')
+        const country = lookup.byIso(countryCode).country
+
+        let response: { resultReadout: string; curl: string; };
+
+        if (countryCode === 'US' || countryCode === 'UK' || countryCode === 'CF' || countryCode === 'AX' || countryCode === 'BS' || countryCode === 'CC' || countryCode === 'CD' || countryCode === 'CK' || countryCode === 'CZ' || countryCode === 'DO' || countryCode === 'FK' || countryCode === 'HM' || countryCode === 'VA' || countryCode === 'IM' || countryCode === 'MH' || countryCode === 'SB' || countryCode === 'TC' || countryCode === 'UM' || countryCode === 'VG' || countryCode === 'VI') {
+            response = {
+                resultReadout: `We currently have ${data.product} IPs available in the following cities in the ${country}: ${list}.`,
+                curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+            }
+        } else {
+            response = {
+                resultReadout: `We currently have ${data.product} IPs available in the following cities in ${country}: ${list}.`,
+                curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+            }
+        }
+
+        return response
     }
     if (data.action === 'Check IP Information') {
         checkIPInfo(data, proxy)
@@ -66,18 +113,6 @@ const processRequest = async (data: Data) => {
     if (data.action === 'Get Current Thread Usage') {
         getThreadUsage(data, proxy)
     }
-}
-
-// const getCountryIPs = (data: Data, proxy) => {
-//     console.log(proxy)
-// }
-
-const getCountryList = (data: Data, proxy) => {
-    console.log('get country list')
-}
-
-const getCityList = (data: Data, proxy) => {
-    console.log('get city list')
 }
 
 const getISPList = (data: Data, proxy) => {
