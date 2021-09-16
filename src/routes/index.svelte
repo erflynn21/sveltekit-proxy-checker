@@ -20,7 +20,7 @@
 	let resultReadout: string = '';
 	let curl: string = '';
 
-	if ($authStore.username) {
+	$: if ($authStore.username && username === '' && password === '') {
 		username = $authStore.username;
 		password = $authStore.password;
 	}

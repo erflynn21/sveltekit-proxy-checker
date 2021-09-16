@@ -1,17 +1,13 @@
 import type { Data } from '../interfaces'
-import { getCountryCode, getProxyURL } from './shared';
+import { getProxyURL } from './shared';
 import firebase from '@firebase/app';
 import '@firebase/functions';
 import lookup from 'country-code-lookup';
-
-// const functions = firebase.functions();
-// functions.useEmulator('localhost', 5001);
 
 const processRequest = async (data: Data) => {
     const proxy = getProxyURL(data)
     if (data.action === 'Check Number of IPs in a Country') {
         const countryCode = data.country;
-        firebase.functions().useEmulator('localhost', 5001)
         const params = { ...data, proxy, countryCode}
         const getCountryIPs = firebase.functions().httpsCallable('getCountryIPs');
         const res = await getCountryIPs(JSON.stringify(params))
