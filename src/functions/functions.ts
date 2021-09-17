@@ -78,7 +78,7 @@ const processRequest = async (data: Data) => {
     if (data.action === 'Get List of Available ISPs') {
         const countryCode = data.country;
         const params = { ...data, proxy, countryCode}
-        firebase.functions().useEmulator('localhost', 5001)
+        // firebase.functions().useEmulator('localhost', 5001)
         const getISPList = firebase.functions().httpsCallable('getISPList');
         const res = await getISPList(JSON.stringify(params))
         const result = JSON.parse(res.data)
@@ -102,7 +102,21 @@ const processRequest = async (data: Data) => {
         return response
     }
     if (data.action === 'Check IP Information') {
-        checkIPInfo(data, proxy)
+        const params = { ...data, proxy}
+        firebase.functions().useEmulator('localhost', 5001)
+        const getIPInfo = firebase.functions().httpsCallable('getIPInfo');
+        const res = await getIPInfo(JSON.stringify(params))
+        const result = JSON.parse(res.data)
+        const info = result.info
+
+        let response: { resultReadout: string; curl: string; };
+
+        response = {
+            resultReadout: info,
+            curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+        }
+        
+        return response
     }
     if (data.action === 'Check Sessions Information') {
         getSessions(data, proxy)
@@ -113,14 +127,6 @@ const processRequest = async (data: Data) => {
     if (data.action === 'Get Current Thread Usage') {
         getThreadUsage(data, proxy)
     }
-}
-
-const getISPList = (data: Data, proxy) => {
-    console.log('get isp list')
-}
-
-const checkIPInfo = (data: Data, proxy) => {
-    console.log('check IP Info')
 }
 
 const getSessions = (data: Data, proxy) => {
