@@ -143,7 +143,6 @@ const processRequest = async (data: Data) => {
         const res = await getStats(JSON.stringify(params))
         const result = JSON.parse(res.data)
         const stats = result.stats
-        console.log(stats)
 
         let response: { resultReadout: string; curl: string; };
         
@@ -155,12 +154,31 @@ const processRequest = async (data: Data) => {
         return response
     }
     if (data.action === 'Get Current Thread Usage') {
-        getThreadUsage(data, proxy)
-    }
-}
+        const params = { ...data, proxy}
+        firebase.functions().useEmulator('localhost', 5001)
+        const getThreads = firebase.functions().httpsCallable('getThreads');
+        const res = await getThreads(JSON.stringify(params))
+        const result = JSON.parse(res.data)
+        const threads = result.threads
 
-const getThreadUsage = (data: Data, proxy) => {
-    console.log('threads')
+        let response: { resultReadout: string; curl: string; };
+
+        if (threads === 1) {
+            response = {
+                resultReadout: `There is currently ${threads} ${data.product} thread being used on this account.`,
+                curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+            }
+        } else {
+            response = {
+                resultReadout: `There are currently ${threads} ${data.product} threads being used on this account.`,
+                curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+            }
+        }
+        
+        
+
+        return response
+    }
 }
 
 export {processRequest}
