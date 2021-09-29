@@ -119,7 +119,24 @@ const processRequest = async (data: Data) => {
         return response
     }
     if (data.action === 'Check Sessions Information') {
-        getSessions(data, proxy)
+        const params = { ...data, proxy}
+        firebase.functions().useEmulator('localhost', 5001)
+        const getSessions = firebase.functions().httpsCallable('getSessions');
+        const res = await getSessions(JSON.stringify(params))
+        const result = JSON.parse(res.data)
+        const sessions = result.sessions
+        console.log(sessions)
+        const allSessions = Object.assign({}, ...sessions)
+        console.log(allSessions)
+
+        let response: { resultReadout: string; curl: string; };
+        
+        response = {
+            resultReadout: JSON.stringify(allSessions, undefined, 4),
+            curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+        }
+
+        return response
     }
     if (data.action === 'Get Stats') {
         getStats(data, proxy)
