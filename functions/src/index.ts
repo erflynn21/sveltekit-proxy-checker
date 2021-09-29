@@ -166,9 +166,37 @@ export const getSessions = functions.https.onCall(async (data, context) => {
   await new Promise<void>(resolve => {
     http.get(options, function(res: { on: (arg0: string, arg1: (response: any) => void) => void; }) {
       res.on('data', function (response) {
-          console.log(JSON.parse(response))
           const sessions = JSON.parse(response)
           dataToSend = JSON.stringify({ sessions, url: options.path })     
+      })
+      resolve()
+    })
+    
+  })
+  return dataToSend
+})
+
+export const getStats = functions.https.onCall(async (data, context) => {
+  const json = JSON.parse(data)
+  const options = {
+      host: json.proxy.host,
+      port: json.proxy.port,
+      path: `https://api.proxyrack.net/stats`,
+      method: 'GET',
+      mode: 'no-cors',
+      headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9',
+          'Proxy-Authorization': 'Basic ' + Buffer.from(json.username + ':' + json.password).toString('base64'),
+      }
+  }
+
+  let dataToSend
+
+  await new Promise<void>(resolve => {
+    http.get(options, function(res: { on: (arg0: string, arg1: (response: any) => void) => void; }) {
+      res.on('data', function (response) {
+          const stats = JSON.parse(response)
+          dataToSend = JSON.stringify({ stats, url: options.path })     
       })
       resolve()
     })

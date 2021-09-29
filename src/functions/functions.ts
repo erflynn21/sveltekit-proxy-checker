@@ -125,9 +125,7 @@ const processRequest = async (data: Data) => {
         const res = await getSessions(JSON.stringify(params))
         const result = JSON.parse(res.data)
         const sessions = result.sessions
-        console.log(sessions)
         const allSessions = Object.assign({}, ...sessions)
-        console.log(allSessions)
 
         let response: { resultReadout: string; curl: string; };
         
@@ -139,19 +137,26 @@ const processRequest = async (data: Data) => {
         return response
     }
     if (data.action === 'Get Stats') {
-        getStats(data, proxy)
+        const params = { ...data, proxy}
+        firebase.functions().useEmulator('localhost', 5001)
+        const getStats = firebase.functions().httpsCallable('getStats');
+        const res = await getStats(JSON.stringify(params))
+        const result = JSON.parse(res.data)
+        const stats = result.stats
+        console.log(stats)
+
+        let response: { resultReadout: string; curl: string; };
+        
+        response = {
+            resultReadout: JSON.stringify(stats, undefined, 4),
+            curl: `curl -x ${proxy['host']}:${proxy['port']} -U ${data.username}:${data.password} ${result.url}`
+        }
+
+        return response
     }
     if (data.action === 'Get Current Thread Usage') {
         getThreadUsage(data, proxy)
     }
-}
-
-const getSessions = (data: Data, proxy) => {
-    console.log('sessions info')
-}
-
-const getStats = (data: Data, proxy) => {
-    console.log('stats')
 }
 
 const getThreadUsage = (data: Data, proxy) => {
