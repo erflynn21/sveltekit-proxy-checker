@@ -2,6 +2,7 @@ import * as functions from "firebase-functions";
 const http = require('http')
 
 export const getCountryIPs = functions.https.onCall(async (data, context) => {
+  let dataToSend
   const json = JSON.parse(data)
   const options = {
       host: json.proxy.host,
@@ -15,8 +16,6 @@ export const getCountryIPs = functions.https.onCall(async (data, context) => {
       }
   }
 
-  let dataToSend
-
   await new Promise<void>(resolve => {
     http.get(options, function(res: { on: (arg0: string, arg1: (response: any) => void) => void; }) {
       res.on('data', function (response: string) {
@@ -25,8 +24,8 @@ export const getCountryIPs = functions.https.onCall(async (data, context) => {
       })
       resolve()
     })
-    
   })
+  
   return dataToSend
 });
 

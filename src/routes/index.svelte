@@ -100,7 +100,10 @@
 						>
 							<option selected>Unmetered Residential</option>
 							<option>Premium Residential</option>
-							<option>Private Residential</option>
+							<option>Private Unmetered Residential</option>
+							<!-- {#if action === 'Check Number of IPs in a Country'}
+								<option>All Residential Proxies</option>
+							{/if} -->
 							<option>USA Datacenter</option>
 							<option>Global Datacenter</option>
 							<option>Canada Datacenter</option>

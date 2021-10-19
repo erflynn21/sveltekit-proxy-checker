@@ -5,10 +5,26 @@ import '@firebase/functions';
 import lookup from 'country-code-lookup';
 
 const processRequest = async (data: Data) => {
-    const proxy = getProxyURL(data)
+    let proxy;
+    if (data.product === 'All Residential Proxies') {
+        let unmeteredData = data
+        unmeteredData.product = 'Unmetered Residential'
+        let premiumData = data
+        premiumData.product = 'Premium Residential'
+        let privateData = data
+        privateData.product = 'Private Unmetered Residential'
+        proxy = {
+            1: getProxyURL(unmeteredData),
+            2: getProxyURL(premiumData),
+            3: getProxyURL(privateData)
+        }
+    } else {
+        proxy = getProxyURL(data)
+    }
     if (data.action === 'Check Number of IPs in a Country') {
         const countryCode = data.country;
         const params = { ...data, proxy, countryCode}
+        console.log(params)
         // firebase.functions().useEmulator('localhost', 5001)
         const getCountryIPs = firebase.functions().httpsCallable('getCountryIPs');
         const res = await getCountryIPs(JSON.stringify(params))

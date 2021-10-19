@@ -31,7 +31,7 @@ const getProxyURL = (data: Data) => {
             port: data.portNumber
         }
     }
-    if (data.product === 'Private Residential') {
+    if (data.product === 'Private Unmetered Residential') {
         proxy = {
             host: 'private.residential.proxyrack.net',
             port: data.portNumber
